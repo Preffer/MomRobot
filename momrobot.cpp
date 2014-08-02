@@ -1,5 +1,7 @@
 #include "momrobot.h"
 #include "ui_momrobot.h"
+#include "textreader.h"
+#include <QDebug>
 
 momRobot::momRobot(QWidget *parent) :
     QMainWindow(parent),
@@ -11,4 +13,12 @@ momRobot::momRobot(QWidget *parent) :
 momRobot::~momRobot()
 {
     delete ui;
+}
+
+void momRobot::on_textButton_clicked()
+{
+
+    QString filePath = QFileDialog::getOpenFileName(this,"Open File", "","Plain Text File (*.txt)");
+    textReader* reader = new textReader(filePath);
+    reader->getIndex();
 }

@@ -15,6 +15,9 @@ public:
     explicit momRobot(QWidget *parent = 0);
     ~momRobot();
 
+private slots:
+    void on_textButton_clicked();
+
 private:
     Ui::momRobot *ui;
 };

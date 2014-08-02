@@ -13,8 +13,10 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        momrobot.cpp
+        momrobot.cpp \
+    textreader.cpp
 
-HEADERS  += momrobot.h
+HEADERS  += momrobot.h \
+    textreader.h
 
 FORMS    += momrobot.ui
