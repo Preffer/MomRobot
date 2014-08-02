@@ -16,14 +16,14 @@ textReader::textReader(QString& filePath)
 
 void textReader::getIndex()
 {
-    QTextStream* stream = new QTextStream(file);
+    QSharedPointer<QTextStream> stream = (QSharedPointer<QTextStream>) new QTextStream(file);
     QString line;
     QStringList fields;
 
     while(!(line = stream->readLine()).isNull()) {
         fields = line.split(" ", QString::SkipEmptyParts);
         if(fields.indexOf(keyName) != -1) {
-            qDebug() << fields;
+            //qDebug() << fields;
             keyIndex = fields.indexOf(keyName);
             // because have space around 月, so have to the additional 3 index
             valueIndex = fields.indexOf(valueName) + valueOffset;
@@ -34,8 +34,18 @@ void textReader::getIndex()
 
 void textReader::getData()
 {
-    //QTextStream* stream = new QTextStream(file);
+    QSharedPointer<QTextStream> stream = (QSharedPointer<QTextStream>) new QTextStream(file);
+    QString line;
+    QStringList fields;
 
+    data = (QSharedPointer< QMap<QString, QString> >) new QMap<QString, QString>;
+    while(!(line = stream->readLine()).isNull()) {
+        if(line.indexOf(dataPrefix) != -1){
+            fields = line.split(" ", QString::SkipEmptyParts);
+            data->insert(fields.at(keyIndex), fields.at(valueIndex));
+        }
+    }
+    //qDebug() << *data;
 }
 
 textReader::~textReader()

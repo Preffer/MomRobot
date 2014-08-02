@@ -3,6 +3,8 @@
 
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QSharedPointer>
+#include <QMap>
 
 class textReader
 {
@@ -15,10 +17,14 @@ public:
 
 private:
     QFile* file;
-    static QString keyName;
-    static QString valueName;
+
     int keyIndex;
     int valueIndex;
+
+    QSharedPointer< QMap<QString, QString> > data;
+
+    static QString keyName;
+    static QString valueName;
     static int valueOffset;
     static QString dataPrefix;
 };
