@@ -1,6 +1,7 @@
 #include "excelreader.h"
 #include <QDebug>
 
+int excelReader::keyLength = 17;
 QString excelReader::keyName = "账号";
 QString excelReader::valueName = "贷款余额";
 QString excelReader::dataPrefix = "PL";
@@ -56,12 +57,48 @@ void excelReader::getIndex()
     }
 }
 
-void excelReader::getData(){
-    //getIndex first
-    this->getIndex();
+void excelReader::getKey(){
     QAxObject *range = worksheet->querySubObject( "Range(const QVariant&)", QVariant(pointToString(keyIndex, dataStart) + ":" + pointToString(keyIndex, rowEnd)));
     //range->dynamicCall( "SetValue(const QString&)", "from qt");
-    qDebug() << range->property("Value").toList();
+    QVariantList all = range->property("Value").toList();
+    int count = all.count();
+    for(int i = 0; i < count; i++) {
+        QString key = all.at(i).toList().at(0).toString();
+        if(key.isEmpty()){
+            dataEnd = dataStart + i - 1;
+            qDebug() << dataStart << dataEnd;
+            return;
+        } else{
+            //qDebug() << key.rightJustified(keyLength, '0');
+            keyList.append(key.rightJustified(keyLength, '0'));
+        }
+    }
+}
+
+void excelReader::getValue()
+{
+    int count = keyList.count();
+    for(int i = 0; i < count; i++){
+        //qDebug() << map->value(keyList.at(i));
+        valueList.append(keyValueMap->value(keyList.at(i)));
+    };
+}
+
+void excelReader::pushValue()
+{
+    QAxObject *range = worksheet->querySubObject( "Range(const QVariant&)", QVariant(pointToString(valueIndex, dataStart) + ":" + pointToString(valueIndex, dataEnd)));
+    //qDebug() << range->property("Value").toList();
+    //range->dynamicCall("SetValue(const QString&", "from qt");
+    range->dynamicCall("SetValue(const QStringList&)", valueList);
+}
+
+void excelReader::exec(QSharedPointer<QMap<QString, QString> > map)
+{
+    keyValueMap = map;
+    this->getIndex();
+    this->getKey();
+    this->getValue();
+    this->pushValue();
 }
 
 excelReader::~excelReader()

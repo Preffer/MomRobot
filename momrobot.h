@@ -1,10 +1,11 @@
 #ifndef MOMROBOT_H
 #define MOMROBOT_H
 
+#include <QApplication>
 #include <QMainWindow>
 
 namespace Ui {
-class momRobot;
+    class momRobot;
 }
 
 class momRobot : public QMainWindow

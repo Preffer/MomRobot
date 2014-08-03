@@ -2,21 +2,28 @@
 #define EXCELREADER_H
 
 #include <QAxObject>
+#include <QSharedPointer>
 
 class excelReader
 {
 public:
     explicit excelReader(QString& filePath);
-    void getIndex();
-    void getData();
+    void exec(QSharedPointer< QMap<QString, QString> > map);
+
     static QString pointToString(int x, int y);
 
     ~excelReader();
 
 private:
+    void getIndex();
+    void getKey();
+    void getValue();
+    void pushValue();
+
     int keyIndex;
     int valueIndex;
     int dataStart;
+    int dataEnd;
 
     int rowStart;
     int colStart;
@@ -29,6 +36,12 @@ private:
     QAxObject* worksheet;
     QAxObject* usedRange;
 
+    QStringList keyList;
+    QStringList valueList;
+
+    QSharedPointer< QMap<QString, QString> > keyValueMap;
+
+    static int keyLength;
     static QString keyName;
     static QString valueName;
     static QString dataPrefix;

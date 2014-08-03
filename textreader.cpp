@@ -32,10 +32,8 @@ void textReader::getIndex()
     }
 }
 
-QSharedPointer< QMap<QString, QString> > textReader::getData()
+void textReader::getData()
 {
-    //call getIndex first
-    this->getIndex();
     QSharedPointer<QTextStream> stream = (QSharedPointer<QTextStream>) new QTextStream(file);
     QString line;
     QStringList fields;
@@ -47,6 +45,11 @@ QSharedPointer< QMap<QString, QString> > textReader::getData()
             data->insert(fields.at(keyIndex), fields.at(valueIndex));
         }
     }
+}
+QSharedPointer<QMap<QString, QString> > textReader::exec()
+{
+    this->getIndex();
+    this->getData();
     return data;
 }
 

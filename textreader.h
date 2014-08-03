@@ -11,11 +11,13 @@ class textReader
 
 public:
     explicit textReader(QString& filePath);
-    void getIndex();
-    QSharedPointer< QMap<QString, QString> > getData();
+    QSharedPointer<QMap<QString, QString> > exec();
     ~textReader();
 
 private:
+    void getIndex();
+    void getData();
+
     QFile* file;
 
     int keyIndex;

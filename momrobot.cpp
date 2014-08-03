@@ -31,8 +31,7 @@ void momRobot::on_excelButton_clicked()
 
 void momRobot::on_startButton_clicked()
 {
-    /*textReader* txtReader = new textReader(textFilePath);
-    qDebug() << txtReader->getData();*/
-    excelReader* xlsReader = new excelReader(excelFilePath);
-    xlsReader->getData();
+    QSharedPointer<textReader> txtReader = (QSharedPointer<textReader>) new textReader(textFilePath);
+    QSharedPointer<excelReader> xlsReader = (QSharedPointer<excelReader>) new excelReader(excelFilePath);
+    xlsReader->exec(txtReader->exec());
 }
