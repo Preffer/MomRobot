@@ -117,9 +117,9 @@ excelReader::~excelReader()
     workbook->dynamicCall("Save(void)");
     workbook->dynamicCall("Close (Boolean)", false);
 
-    delete excel;
+    /*delete excel;
     delete workbooks;
     delete workbook;
     delete worksheet;
-    delete usedRange;
+    delete usedRange;*/
 }

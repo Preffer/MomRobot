@@ -2,9 +2,10 @@
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    momRobot w;
-    w.show();
+    QSharedPointer<QApplication> app = (QSharedPointer<QApplication>) new QApplication(argc, argv);
+    QSharedPointer<momRobot> widget = (QSharedPointer<momRobot>) new momRobot();
 
-    return a.exec();
+    widget->show();
+
+    return app->exec();
 }

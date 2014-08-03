@@ -3,6 +3,7 @@
 
 #include <QApplication>
 #include <QMainWindow>
+#include <QSharedPointer>
 
 namespace Ui {
     class momRobot;
