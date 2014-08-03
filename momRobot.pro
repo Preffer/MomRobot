@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT       += axcontainer
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -14,9 +15,11 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         momrobot.cpp \
-        textreader.cpp
+        textreader.cpp \
+        excelreader.cpp
 
 HEADERS  += momrobot.h \
-        textreader.h
+        textreader.h \
+        excelreader.h
 
 FORMS    += momrobot.ui

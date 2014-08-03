@@ -18,8 +18,14 @@ public:
 private slots:
     void on_textButton_clicked();
 
+    void on_excelButton_clicked();
+
+    void on_startButton_clicked();
+
 private:
     Ui::momRobot *ui;
+    QString textFilePath;
+    QString excelFilePath;
 };
 
 #endif // MOMROBOT_H

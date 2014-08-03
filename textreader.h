@@ -12,7 +12,7 @@ class textReader
 public:
     explicit textReader(QString& filePath);
     void getIndex();
-    void getData();
+    QSharedPointer< QMap<QString, QString> > getData();
     ~textReader();
 
 private:
