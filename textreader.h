@@ -11,7 +11,7 @@ class textReader
 
 public:
     explicit textReader(QString& filePath);
-    QSharedPointer<QMap<QString, QString> > exec();
+    QSharedPointer< QMap<QString, QString> > exec();
     ~textReader();
 
 private:

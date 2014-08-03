@@ -9,10 +9,9 @@ class excelReader
 public:
     explicit excelReader(QString& filePath);
     void exec(QSharedPointer< QMap<QString, QString> > map);
+    ~excelReader();
 
     static QString pointToString(int x, int y);
-
-    ~excelReader();
 
 private:
     void getIndex();
@@ -36,8 +35,8 @@ private:
     QAxObject* worksheet;
     QAxObject* usedRange;
 
-    QStringList keyList;
-    QStringList valueList;
+    QSharedPointer<QStringList> keyList;
+    QSharedPointer<QStringList> valueList;
 
     QSharedPointer< QMap<QString, QString> > keyValueMap;
 
