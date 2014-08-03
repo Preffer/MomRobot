@@ -89,7 +89,16 @@ void excelReader::pushValue()
     QAxObject *range = worksheet->querySubObject( "Range(const QVariant&)", QVariant(pointToString(valueIndex, dataStart) + ":" + pointToString(valueIndex, dataEnd)));
     //qDebug() << range->property("Value").toList();
     //range->dynamicCall("SetValue(const QString&", "from qt");
-    range->dynamicCall("SetValue(const QStringList&)", valueList);
+    int count = valueList.count();
+    QVariantList box;
+    QVariantList temp;
+    for(int i = 0; i < count; i++) {
+        temp.clear();
+        temp.append(valueList.at(i));
+        box.append(QVariant(temp));
+    }
+    //qDebug() << box;
+    range->dynamicCall("SetValue(const QVariant&)", QVariant(box));
 }
 
 void excelReader::exec(QSharedPointer<QMap<QString, QString> > map)
