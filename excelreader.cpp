@@ -31,8 +31,6 @@ excelReader::excelReader(QString& filePath)
         colStart = usedRange->property("Column").toInt();
         rowEnd = usedRange->querySubObject("Rows")->property("Count").toInt() + rowStart - 1;
         colEnd = usedRange->querySubObject("Columns")->property("Count").toInt() + colStart - 1;
-
-        //qDebug() << rowStart << colStart << rowEnd << colEnd;
     }
 }
 
@@ -42,20 +40,15 @@ void excelReader::getIndex()
     for (int i = rowStart; i <= rowEnd; i++) {
         for (int j = colStart; j <= colEnd; j++) {
             cell = (QSharedPointer<QAxObject>) worksheet->querySubObject("Cells(Int, Int)", i, j);
-            //QVariant cellValue = cell->property("Value");
-            //cell->dynamicCall("SetValue(QString)", QString("(%1, %2)").arg(i).arg(j));
             if(cell->property("Value").toString() == keyName) {
-                qDebug() << j;
                 keyIndex = j;
                 dataStart = i + 1;
             } else{
                 if(cell->property("Value").toString() == dateName) {
-                    qDebug() << j;
                     dateIndex = j;
                 } else{
                     if(cell->property("Value").toString() == valueName) {
                         valueIndex = j;
-                        qDebug() << j;
                         return;
                     }
                 }
@@ -67,7 +60,6 @@ void excelReader::getIndex()
 void excelReader::getKey(){
     keyList = (QSharedPointer<QStringList>) new QStringList();
     QSharedPointer<QAxObject> range = (QSharedPointer<QAxObject>) worksheet->querySubObject( "Range(const QVariant&)", QVariant(pointToString(keyIndex, dataStart) + ":" + pointToString(keyIndex, rowEnd)));
-    //range->dynamicCall( "SetValue(const QString&)", "from qt");
     QSharedPointer<QVariantList> all = (QSharedPointer<QVariantList>) new QVariantList(range->property("Value").toList());
     int count = all->count();
     QString key;
@@ -75,10 +67,8 @@ void excelReader::getKey(){
         key = all->at(i).toList().at(0).toString();
         if(key.isEmpty()){
             dataEnd = dataStart + i - 1;
-            qDebug() << dataStart << dataEnd;
             return;
         } else{
-            //qDebug() << key.rightJustified(keyLength, '0');
             keyList->append(key.rightJustified(keyLength, '0'));
         }
     }
@@ -86,14 +76,13 @@ void excelReader::getKey(){
 
 void excelReader::checkNewMonth()
 {
-    qDebug() << dateIndex << dataEnd << dataStart;
+    //check strategy:
+    //change dataEnd to the last row need to be update
     QSharedPointer<QAxObject> cell;
     int day;
-    //qDebug() << worksheet->querySubObject("Cells(Int, Int)", 5, 6)->property("Value");
-    for (int i = 3198; i >= dataStart; i--) {
-        qDebug() << i;
-        cell = (QSharedPointer<QAxObject>) worksheet->querySubObject("Cells(Int, Int)", dateIndex, i);
-        qDebug() << cell->property("Value").toString();
+    for (int i = dataEnd; i >= dataStart; i--) {
+        //remember in excel, Cells(Int, Int) in the format (row, col)
+        cell = (QSharedPointer<QAxObject>) worksheet->querySubObject("Cells(Int, Int)", i, dateIndex);
         day = cell->property("Value").toString().right(2).toInt();
         if(day < newMonthBound) {
             dataEnd = i;
@@ -110,7 +99,6 @@ void excelReader::getValue()
     int count = keyList->count();
     QString value;
     for(int i = 0; i < count; i++) {
-        //qDebug() << map->value(keyList.at(i));
         value = keyValueMap->value(keyList->at(i));
         if(value.isEmpty()) {
             value = "NULL";
@@ -121,12 +109,8 @@ void excelReader::getValue()
 
 void excelReader::pushValue()
 {
-    qDebug() << valueIndex << dataStart << dataEnd;
     QSharedPointer<QAxObject> range = (QSharedPointer<QAxObject>) worksheet->querySubObject( "Range(const QVariant&)", QVariant(pointToString(valueIndex, dataStart) + ":" + pointToString(valueIndex, dataEnd)));
-    qDebug() << range->property("Value");
-    //range->dynamicCall("SetValue(const QString&", "from qt");
     range->dynamicCall("SetValue(const QVariant&)", *pack(valueList));
-    qDebug() << *pack(valueList);
 }
 
 QSharedPointer<QVariant> excelReader::pack(QSharedPointer<QStringList> list)
@@ -148,7 +132,7 @@ void excelReader::exec(QSharedPointer<QMap<QString, QString> > map)
     keyValueMap = map;
     this->getIndex();
     this->getKey();
-    //this->checkNewMonth();
+    this->checkNewMonth();
     this->getValue();
     this->pushValue();
 }
@@ -158,8 +142,10 @@ excelReader::~excelReader()
     workbook->dynamicCall("Save(void)");
     workbook->dynamicCall("Close (Boolean)", false);
 
-    // delete will crash the program, later to find the reason
-    /*delete excel;
+    delete excel;
+
+    /* seems delete these will crash the program
+     * may due to COM
     delete workbooks;
     delete workbook;
     delete worksheet;

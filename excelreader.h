@@ -42,7 +42,6 @@ private:
 
     QSharedPointer<QStringList> keyList;
     QSharedPointer<QStringList> valueList;
-
     QSharedPointer< QMap<QString, QString> > keyValueMap;
 
     static int keyLength;
