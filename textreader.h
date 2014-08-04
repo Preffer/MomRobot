@@ -1,10 +1,10 @@
 #ifndef TEXTREADER_H
 #define TEXTREADER_H
 
-#include <QMessageBox>
-#include <QFileDialog>
+#include <QFile>
 #include <QSharedPointer>
 #include <QMap>
+#include <stdexcept>
 
 class textReader
 {

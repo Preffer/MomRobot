@@ -43,7 +43,7 @@
        <string notr="true">width: 30%;</string>
       </property>
       <property name="text">
-       <string>Choose Text File</string>
+       <string>选择文本文件</string>
       </property>
       <property name="flat">
        <bool>false</bool>
@@ -72,7 +72,7 @@
        </sizepolicy>
       </property>
       <property name="text">
-       <string>Choose Excel File</string>
+       <string>选择Excel文件</string>
       </property>
      </widget>
     </item>
@@ -100,7 +100,7 @@
        </size>
       </property>
       <property name="text">
-       <string>Start</string>
+       <string>开始！</string>
       </property>
      </widget>
     </item>

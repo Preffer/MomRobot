@@ -3,6 +3,8 @@
 
 #include <QAxObject>
 #include <QSharedPointer>
+#include <QDir>
+#include <stdexcept>
 
 class excelReader
 {
@@ -11,6 +13,7 @@ public:
     void exec(QSharedPointer< QMap<QString, QString> > map);
     ~excelReader();
 
+    QString saveFilePath;
     static QString pointToString(int x, int y);
 
 private:

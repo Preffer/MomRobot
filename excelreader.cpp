@@ -17,6 +17,12 @@ QString excelReader::pointToString(int x, int y)
 excelReader::excelReader(QString& filePath)
 {
     if(!filePath.isEmpty()){
+        //make the saveFilePath
+        QStringList filePathParts = filePath.split(".");
+        filePathParts.replace(0, filePathParts.at(0) + "可报");
+        saveFilePath = filePathParts.join(".");
+
+        //open excel
         excel = new QAxObject("Excel.Application");
         excel->setProperty("Visible", false);
         excel->setProperty("DisplayAlerts", false);
@@ -31,6 +37,8 @@ excelReader::excelReader(QString& filePath)
         colStart = usedRange->property("Column").toInt();
         rowEnd = usedRange->querySubObject("Rows")->property("Count").toInt() + rowStart - 1;
         colEnd = usedRange->querySubObject("Columns")->property("Count").toInt() + colStart - 1;
+    } else{
+        throw std::invalid_argument("请选择Excel文件");
     }
 }
 
@@ -55,6 +63,7 @@ void excelReader::getIndex()
             }
         }
     }
+    throw std::invalid_argument("选择的Excel文件有问题");
 }
 
 void excelReader::getKey(){
@@ -111,6 +120,11 @@ void excelReader::pushValue()
 {
     QSharedPointer<QAxObject> range = (QSharedPointer<QAxObject>) worksheet->querySubObject( "Range(const QVariant&)", QVariant(pointToString(valueIndex, dataStart) + ":" + pointToString(valueIndex, dataEnd)));
     range->dynamicCall("SetValue(const QVariant&)", *pack(valueList));
+
+    //save the result
+    workbook->dynamicCall("SaveAs(const QString&)", QDir::toNativeSeparators(saveFilePath));
+    workbook->dynamicCall("Close (Boolean)", false);
+    excel->dynamicCall("Quit()");
 }
 
 QSharedPointer<QVariant> excelReader::pack(QSharedPointer<QStringList> list)
@@ -139,13 +153,10 @@ void excelReader::exec(QSharedPointer<QMap<QString, QString> > map)
 
 excelReader::~excelReader()
 {
-    workbook->dynamicCall("Save(void)");
-    workbook->dynamicCall("Close (Boolean)", false);
-
     delete excel;
 
     /* seems delete these will crash the program
-     * may due to COM
+     * may due to  the data their point to is a COM data
     delete workbooks;
     delete workbook;
     delete worksheet;

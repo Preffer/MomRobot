@@ -1,9 +1,13 @@
 #ifndef MOMROBOT_H
 #define MOMROBOT_H
 
+#include "textreader.h"
+#include "excelreader.h"
 #include <QApplication>
 #include <QMainWindow>
-#include <QSharedPointer>
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QTime>
 
 namespace Ui {
     class momRobot;
@@ -28,6 +32,9 @@ private:
     Ui::momRobot *ui;
     QString textFilePath;
     QString excelFilePath;
+
+    QSharedPointer<textReader> txtReader;
+    QSharedPointer<excelReader> xlsReader;
 };
 
 #endif // MOMROBOT_H

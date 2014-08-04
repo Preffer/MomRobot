@@ -8,9 +8,13 @@ int textReader::valueOffset = -3;
 
 textReader::textReader(QString& filePath)
 {
-    file = new QFile(filePath);
-    if(!file->open(QIODevice::ReadOnly)) {
-        QMessageBox::warning(NULL, "Failed", "Open file failed!");
+    if(!filePath.isEmpty()){
+        file = new QFile(filePath);
+        if(!file->open(QIODevice::ReadOnly)) {
+            throw std::invalid_argument("无法打开文本文件");
+        }
+    } else{
+        throw std::invalid_argument("请选择文本文件");
     }
 }
 
@@ -27,9 +31,10 @@ void textReader::getIndex()
             keyIndex = fields.indexOf(keyName);
             // because have space around 月, so have to the additional 3 index
             valueIndex = fields.indexOf(valueName) + valueOffset;
-            break;
+            return;
         }
     }
+    throw std::invalid_argument("选择的文本文件有问题");
 }
 
 void textReader::getData()
