@@ -18,9 +18,14 @@ private:
     void getKey();
     void getValue();
     void pushValue();
+    void checkNewMonth();
+
+    QSharedPointer<QVariant> pack(QSharedPointer<QStringList> list);
+    //abort to build an unpack function because many additional works done in its iteration
 
     int keyIndex;
     int valueIndex;
+    int dateIndex;
     int dataStart;
     int dataEnd;
 
@@ -43,7 +48,9 @@ private:
     static int keyLength;
     static QString keyName;
     static QString valueName;
+    static QString dateName;
     static QString dataPrefix;
+    static int newMonthBound;
 };
 
 #endif // EXCELREADER_H
