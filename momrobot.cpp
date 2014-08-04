@@ -7,6 +7,7 @@ momRobot::momRobot(QWidget *parent) :
     ui(new Ui::momRobot)
 {
     ui->setupUi(this);
+    ui->tabWidget->setCurrentIndex(0);
 }
 
 momRobot::~momRobot()

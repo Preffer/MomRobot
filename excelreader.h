@@ -52,6 +52,7 @@ private:
     static QString valueName;
     static QString dateName;
     static QString dataPrefix;
+    static int headerWithin;
     static int newMonthBound;
 };
 

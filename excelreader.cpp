@@ -6,6 +6,7 @@ QString excelReader::keyName = "账号";
 QString excelReader::valueName = "贷款余额";
 QString excelReader::dateName = "首次放款日";
 QString excelReader::dataPrefix = "PL";
+int excelReader::headerWithin = 10;
 int excelReader::newMonthBound = 21;
 
 QString excelReader::pointToString(int x, int y)
@@ -49,7 +50,7 @@ excelReader::excelReader(QString& filePath)
 void excelReader::getIndex()
 {
     QSharedPointer<QAxObject> cell;
-    for (int i = rowStart; i <= rowEnd; i++) {
+    for (int i = rowStart; i <= headerWithin; i++) {
         for (int j = colStart; j <= colEnd; j++) {
             cell = (QSharedPointer<QAxObject>) worksheet->querySubObject("Cells(Int, Int)", i, j);
             if(cell->property("Value").toString() == keyName) {
