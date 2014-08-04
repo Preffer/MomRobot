@@ -3,14 +3,16 @@
 
 QString textReader::keyName = "贷款账号";
 QString textReader::valueName = "贷款余额";
-QString textReader::dataPrefix = "000000";
+QString textReader::dataPrefix = "0000";
 int textReader::valueOffset = -3;
 
 textReader::textReader(QString& filePath)
 {
     if(!filePath.isEmpty()){
         file = new QFile(filePath);
-        if(!file->open(QIODevice::ReadOnly)) {
+        if(file->open(QIODevice::ReadOnly)) {
+            stream = new QTextStream(file);
+        } else{
             throw std::invalid_argument("无法打开文本文件");
         }
     } else{
@@ -20,14 +22,12 @@ textReader::textReader(QString& filePath)
 
 void textReader::getIndex()
 {
-    QSharedPointer<QTextStream> stream = (QSharedPointer<QTextStream>) new QTextStream(file);
     QString line;
     QStringList fields;
 
     while(!(line = stream->readLine()).isNull()) {
         fields = line.split(" ", QString::SkipEmptyParts);
         if(fields.indexOf(keyName) != -1) {
-            //qDebug() << fields;
             keyIndex = fields.indexOf(keyName);
             // because have space around 月, so have to the additional 3 index
             valueIndex = fields.indexOf(valueName) + valueOffset;
@@ -39,7 +39,6 @@ void textReader::getIndex()
 
 void textReader::getData()
 {
-    QSharedPointer<QTextStream> stream = (QSharedPointer<QTextStream>) new QTextStream(file);
     QString line;
     QStringList fields;
 
@@ -60,5 +59,7 @@ QSharedPointer<QMap<QString, QString> > textReader::exec()
 
 textReader::~textReader()
 {
+    file->close();
     delete file;
+    delete stream;
 }

@@ -2,6 +2,7 @@
 #define TEXTREADER_H
 
 #include <QFile>
+#include <QTextStream>
 #include <QSharedPointer>
 #include <QMap>
 #include <stdexcept>
@@ -19,6 +20,7 @@ private:
     void getData();
 
     QFile* file;
+    QTextStream* stream;
 
     int keyIndex;
     int valueIndex;
