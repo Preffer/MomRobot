@@ -18,8 +18,13 @@ SOURCES += main.cpp\
         textreader.cpp \
         excelreader.cpp
 
-HEADERS  += momrobot.h \
+HEADERS += momrobot.h \
         textreader.h \
         excelreader.h
 
-FORMS    += momrobot.ui
+FORMS   += momrobot.ui
+
+RC_FILE += logo.rc
+
+RESOURCES += \
+    resource.qrc
