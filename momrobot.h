@@ -29,6 +29,8 @@ private slots:
     void on_startButton_clicked();
 
 private:
+    void updateConfig();
+
     Ui::momRobot *ui;
     QString textFilePath;
     QString excelFilePath;

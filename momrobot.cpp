@@ -10,6 +10,22 @@ momRobot::momRobot(QWidget *parent) :
     ui->tabWidget->setCurrentIndex(0);
 }
 
+void momRobot::updateConfig()
+{
+    txtReader->keyName = ui->txtKeyName->text();
+    txtReader->valueName = ui->txtValueName->text();
+    txtReader->dataPrefix = ui->txtDataPrefix->text();
+    txtReader->valueOffset = ui->txtValueOffset->text().toInt();
+
+    xlsReader->keyName = ui->excelKeyName->text();
+    xlsReader->valueName = ui->excelValueName->text();
+    xlsReader->dateName = ui->excelDateName->text();
+    xlsReader->dataPrefix = ui->excelDataPrefix->text();
+    xlsReader->keyLength = ui->excelKeyLength->text().toInt();
+    xlsReader->headerWithin = ui->excelHeaderWithin->text().toInt();
+    xlsReader->newMonthBound = ui->excelNewMonthBound->text().toInt();
+}
+
 momRobot::~momRobot()
 {
     delete ui;
@@ -17,7 +33,6 @@ momRobot::~momRobot()
 
 void momRobot::on_textButton_clicked()
 {
-
     textFilePath = QFileDialog::getOpenFileName(this,"Open File", "","文本文件 (*)");
     ui->textFilePath->setText(textFilePath);
 }
@@ -34,6 +49,7 @@ void momRobot::on_startButton_clicked()
     try{
         txtReader = (QSharedPointer<textReader>) new textReader(textFilePath);
         xlsReader = (QSharedPointer<excelReader>) new excelReader(excelFilePath);
+        this->updateConfig();
         xlsReader->exec(txtReader->exec());
     }
     catch(std::invalid_argument& e){

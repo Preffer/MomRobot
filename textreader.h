@@ -15,6 +15,11 @@ public:
     QSharedPointer< QMap<QString, QString> > exec();
     ~textReader();
 
+    QString keyName;
+    QString valueName;
+    QString dataPrefix;
+    int valueOffset;
+
 private:
     void getIndex();
     void getData();
@@ -26,11 +31,6 @@ private:
     int valueIndex;
 
     QSharedPointer< QMap<QString, QString> > data;
-
-    static QString keyName;
-    static QString valueName;
-    static int valueOffset;
-    static QString dataPrefix;
 };
 
 #endif // TEXTREADER_H

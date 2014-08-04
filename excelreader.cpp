@@ -1,14 +1,6 @@
 #include "excelreader.h"
 #include <QDebug>
 
-int excelReader::keyLength = 17;
-QString excelReader::keyName = "账号";
-QString excelReader::valueName = "贷款余额";
-QString excelReader::dateName = "首次放款日";
-QString excelReader::dataPrefix = "PL";
-int excelReader::headerWithin = 10;
-int excelReader::newMonthBound = 21;
-
 QString excelReader::pointToString(int x, int y)
 {
     int A = 'A';
@@ -18,6 +10,7 @@ QString excelReader::pointToString(int x, int y)
 excelReader::excelReader(QString& filePath)
 {
     keyIndex = dataStart = dateIndex = valueIndex = 0;
+
     if(!filePath.isEmpty()){
         //make the saveFilePath
         QStringList filePathParts = filePath.split(".");

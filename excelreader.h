@@ -16,6 +16,14 @@ public:
     QString saveFilePath;
     static QString pointToString(int x, int y);
 
+    QString keyName;
+    QString valueName;
+    QString dateName;
+    QString dataPrefix;
+    int keyLength;
+    int headerWithin;
+    int newMonthBound;
+
 private:
     void getIndex();
     void getKey();
@@ -46,14 +54,6 @@ private:
     QSharedPointer<QStringList> keyList;
     QSharedPointer<QStringList> valueList;
     QSharedPointer< QMap<QString, QString> > keyValueMap;
-
-    static int keyLength;
-    static QString keyName;
-    static QString valueName;
-    static QString dateName;
-    static QString dataPrefix;
-    static int headerWithin;
-    static int newMonthBound;
 };
 
 #endif // EXCELREADER_H
