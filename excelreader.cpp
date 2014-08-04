@@ -16,6 +16,7 @@ QString excelReader::pointToString(int x, int y)
 
 excelReader::excelReader(QString& filePath)
 {
+    keyIndex = dataStart = dateIndex = valueIndex = 0;
     if(!filePath.isEmpty()){
         //make the saveFilePath
         QStringList filePathParts = filePath.split(".");
@@ -60,9 +61,11 @@ void excelReader::getIndex()
                 } else{
                     if(cell->property("Value").toString() == valueName) {
                         valueIndex = j;
-                        return;
                     }
                 }
+            }
+            if(keyIndex && dataStart && dateIndex && valueIndex) {
+                return;
             }
         }
     }

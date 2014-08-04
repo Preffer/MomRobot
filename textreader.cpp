@@ -3,7 +3,7 @@
 
 QString textReader::keyName = "贷款账号";
 QString textReader::valueName = "贷款余额";
-QString textReader::dataPrefix = "0000";
+QString textReader::dataPrefix = "000000";
 int textReader::valueOffset = -3;
 
 textReader::textReader(QString& filePath)
