@@ -50,7 +50,7 @@ void textReader::getData()
         }
     }
 }
-QSharedPointer<QMap<QString, QString> > textReader::exec()
+QSharedPointer< QMap<QString, QString> > textReader::exec()
 {
     this->getIndex();
     this->getData();
@@ -60,6 +60,6 @@ QSharedPointer<QMap<QString, QString> > textReader::exec()
 textReader::~textReader()
 {
     file->close();
-    delete file;
     delete stream;
+    delete file;
 }

@@ -24,6 +24,9 @@ excelReader::excelReader(QString& filePath)
 
         //open excel
         excel = new QAxObject("Excel.Application");
+        if(excel->isNull()) {
+            throw std::invalid_argument("缺少Excel相关程序");
+        }
         excel->setProperty("Visible", false);
         excel->setProperty("DisplayAlerts", false);
 
@@ -104,15 +107,22 @@ void excelReader::checkNewMonth()
 
 void excelReader::getValue()
 {
+    /* this function will delete the rows which is not in the list
+     * and minus dataEnd each time
+     */
     valueList = (QSharedPointer<QStringList>) new QStringList();
     int count = keyList->count();
     QString value;
+    QSharedPointer<QAxObject> row;
     for(int i = 0; i < count; i++) {
         value = keyValueMap->value(keyList->at(i));
         if(value.isEmpty()) {
-            value = "NULL";
+            row = (QSharedPointer<QAxObject>) worksheet->querySubObject("Rows(Int)", i + dataStart);
+            row->dynamicCall("Delete()");
+            dataEnd--;
+        } else{
+            valueList->append(value);
         }
-        valueList->append(value);
     }
 }
 
