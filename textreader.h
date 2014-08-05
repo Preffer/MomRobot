@@ -7,8 +7,10 @@
 #include <QMap>
 #include <stdexcept>
 
-class textReader
+class textReader : public QObject
 {
+
+    Q_OBJECT
 
 public:
     explicit textReader(QString& filePath);

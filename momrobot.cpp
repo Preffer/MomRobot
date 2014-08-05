@@ -49,6 +49,9 @@ void momRobot::on_startButton_clicked()
         txtReader = (QSharedPointer<textReader>) new textReader(textFilePath);
         xlsReader = (QSharedPointer<excelReader>) new excelReader(excelFilePath);
         this->updateConfig();
+
+        connect(xlsReader.data(), SIGNAL(progressBarInit(int, int)), this->ui->progressBar, SLOT(setRange(int, int)));
+        connect(xlsReader.data(), SIGNAL(progressBarUpdate(int)), this->ui->progressBar, SLOT(setValue(int)));
         xlsReader->exec(txtReader->exec());
     }
     catch(std::invalid_argument& e){

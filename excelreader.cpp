@@ -106,14 +106,17 @@ void excelReader::getValue()
 {
     /* this function will delete the rows which is not in the list
      * and minus dataEnd each time
+     * It take quit a lot of time, so need a progress bar
      */
     valueList = (QSharedPointer<QStringList>) new QStringList();
     int count = keyList->count();
+    emit progressBarInit(0, count);
     QString value;
     QSharedPointer<QAxObject> row;
     for(int i = 0; i < count; i++) {
         value = keyValueMap->value(keyList->at(i));
         if(value.isEmpty()) {
+            emit progressBarUpdate(i);
             row = (QSharedPointer<QAxObject>) worksheet->querySubObject("Rows(Int)", i + dataStart);
             row->dynamicCall("Delete()");
             dataEnd--;
@@ -121,6 +124,8 @@ void excelReader::getValue()
             valueList->append(value);
         }
     }
+    //make the progressBar full
+    emit progressBarUpdate(count);
 }
 
 void excelReader::pushValue()

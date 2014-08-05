@@ -6,8 +6,10 @@
 #include <QDir>
 #include <stdexcept>
 
-class excelReader
+class excelReader : public QObject
 {
+    Q_OBJECT
+
 public:
     explicit excelReader(QString& filePath);
     void exec(QSharedPointer< QMap<QString, QString> > map);
@@ -22,6 +24,10 @@ public:
     int keyLength;
     int headerWithin;
     int newMonthBound;
+
+signals:
+    void progressBarInit(int min, int max);
+    void progressBarUpdate(int value);
 
 private:
     void getIndex();
