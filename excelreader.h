@@ -19,7 +19,6 @@ public:
     QString keyName;
     QString valueName;
     QString dateName;
-    QString dataPrefix;
     int keyLength;
     int headerWithin;
     int newMonthBound;

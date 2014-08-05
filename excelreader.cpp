@@ -33,7 +33,7 @@ excelReader::excelReader(QString& filePath)
         usedRange = worksheet->querySubObject("UsedRange");
         rowStart = usedRange->property("Row").toInt();
         colStart = usedRange->property("Column").toInt();
-        rowEnd = usedRange->querySubObject("Rows")->property("Count").toInt() + rowStart - 1;
+        dataEnd = rowEnd = usedRange->querySubObject("Rows")->property("Count").toInt() + rowStart - 1;
         colEnd = usedRange->querySubObject("Columns")->property("Count").toInt() + colStart - 1;
     } else{
         throw std::invalid_argument("请选择Excel文件");

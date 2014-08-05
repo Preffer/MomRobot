@@ -20,7 +20,6 @@ void momRobot::updateConfig()
     xlsReader->keyName = ui->excelKeyName->text();
     xlsReader->valueName = ui->excelValueName->text();
     xlsReader->dateName = ui->excelDateName->text();
-    xlsReader->dataPrefix = ui->excelDataPrefix->text();
     xlsReader->keyLength = ui->excelKeyLength->text().toInt();
     xlsReader->headerWithin = ui->excelHeaderWithin->text().toInt();
     xlsReader->newMonthBound = ui->excelNewMonthBound->text().toInt();
