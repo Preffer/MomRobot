@@ -24,6 +24,7 @@ excelReader::excelReader(QString& filePath)
         }
         excel->setProperty("Visible", false);
         excel->setProperty("DisplayAlerts", false);
+        excel->setProperty("ScreenUpdating", false);
 
         workbooks = excel->querySubObject("WorkBooks");
         workbooks->dynamicCall("Open (const QString&)", filePath);
@@ -134,6 +135,7 @@ void excelReader::pushValue()
     range->dynamicCall("SetValue(const QVariant&)", *pack(valueList));
 
     //save the result
+    excel->setProperty("ScreenUpdating", true);
     workbook->dynamicCall("SaveAs(const QString&)", QDir::toNativeSeparators(saveFilePath));
     workbook->dynamicCall("Close (Boolean)", false);
     excel->dynamicCall("Quit()");

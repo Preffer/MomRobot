@@ -9,7 +9,6 @@
 
 class textReader : public QObject
 {
-
     Q_OBJECT
 
 public:
