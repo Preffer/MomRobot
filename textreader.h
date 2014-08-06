@@ -1,4 +1,4 @@
-#ifndef TEXTREADER_H
+    #ifndef TEXTREADER_H
 #define TEXTREADER_H
 
 #include <QFile>

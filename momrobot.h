@@ -7,6 +7,7 @@
 #include <QMainWindow>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QtConcurrentRun>
 #include <QTime>
 
 namespace Ui {
