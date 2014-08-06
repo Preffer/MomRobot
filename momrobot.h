@@ -22,12 +22,20 @@ public:
     explicit momRobot(QWidget *parent = 0);
     ~momRobot();
 
+signals:
+    void throwException(QString exception);
+    void complete(int ms);
+
 private slots:
     void on_textButton_clicked();
 
     void on_excelButton_clicked();
 
     void on_startButton_clicked();
+
+    void receiveException(QString exception);
+
+    void showComplete(int ms);
 
 private:
     void updateConfig();

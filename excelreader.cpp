@@ -1,5 +1,6 @@
 #include "excelreader.h"
 #include <QDebug>
+#include <windows.h>
 
 QString excelReader::pointToString(int x, int y)
 {
@@ -17,6 +18,9 @@ excelReader::excelReader(QString& filePath)
         filePathParts.replace(0, filePathParts.at(0) + "可报");
         saveFilePath = filePathParts.join(".");
 
+        //hack here, due to call OLE object in child-thread
+        //this fn is in windows.h
+        OleInitialize(0);
         //open excel
         excel = new QAxObject("Excel.Application");
         if(excel->isNull()) {

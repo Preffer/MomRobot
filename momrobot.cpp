@@ -8,6 +8,9 @@ momRobot::momRobot(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->tabWidget->setCurrentIndex(0);
+    //connect signals
+    connect(this, SIGNAL(throwException(QString)), this, SLOT(receiveException(QString)));
+    connect(this, SIGNAL(complete(int)), this, SLOT(showComplete(int)));
 }
 
 void momRobot::updateConfig()
@@ -31,18 +34,23 @@ void momRobot::processData()
     try{
         txtReader = (QSharedPointer<textReader>) new textReader(textFilePath);
         xlsReader = (QSharedPointer<excelReader>) new excelReader(excelFilePath);
-        this->updateConfig();
 
         connect(xlsReader.data(), SIGNAL(progressBarInit(int, int)), this->ui->progressBar, SLOT(setRange(int, int)));
         connect(xlsReader.data(), SIGNAL(progressBarUpdate(int)), this->ui->progressBar, SLOT(setValue(int)));
+
+        this->updateConfig();
         xlsReader->exec(txtReader->exec());
     }
+    /* have to use exception to transfer the error message
+     * because some exceptions occur in its constructor,
+     * so I can't connect it to slot directly
+     */
     catch(std::invalid_argument& e){
-        QMessageBox::critical (this, "出现错误", e.what());
+        emit throwException(QString(e.what()));
         return;
     }
     QTime end = QTime::currentTime();
-    QMessageBox::information(this, "操作完成", QString("操作完成!  用时 %1 ms \n已保存到 %2").arg(start.msecsTo(end)).arg(xlsReader->saveFilePath));
+    emit complete(start.msecsTo(end));
 }
 
 void momRobot::on_textButton_clicked()
@@ -59,7 +67,17 @@ void momRobot::on_excelButton_clicked()
 
 void momRobot::on_startButton_clicked()
 {
-    QFuture<void> future = QtConcurrent::run(this, &momRobot::processData);
+    QtConcurrent::run(this, &momRobot::processData);
+}
+
+void momRobot::receiveException(QString exception)
+{
+    QMessageBox::critical(this, "出现错误", exception);
+}
+
+void momRobot::showComplete(int ms)
+{
+    QMessageBox::information(this, "操作完成", QString("操作完成!  用时 %1 ms \n已保存到 %2").arg(ms).arg(xlsReader->saveFilePath));
 }
 
 momRobot::~momRobot()
