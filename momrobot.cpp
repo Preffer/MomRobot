@@ -25,7 +25,19 @@ void momRobot::updateConfig()
     xlsReader->newMonthBound = ui->excelNewMonthBound->text().toInt();
 }
 
-void momRobot::processData()
+void momRobot::on_textButton_clicked()
+{
+    textFilePath = QFileDialog::getOpenFileName(this,"Open File", "","文本文件 (*)");
+    ui->textFilePath->setText(textFilePath);
+}
+
+void momRobot::on_excelButton_clicked()
+{
+    excelFilePath = QFileDialog::getOpenFileName(this,"Open File", "","Excel文件 (*.xlsx *.xls)");
+    ui->excelFilePath->setText(excelFilePath);
+}
+
+void momRobot::on_startButton_clicked()
 {
     QTime start =  QTime::currentTime ();
     try{
@@ -43,23 +55,6 @@ void momRobot::processData()
     }
     QTime end = QTime::currentTime();
     QMessageBox::information(this, "操作完成", QString("操作完成!  用时 %1 ms \n已保存到 %2").arg(start.msecsTo(end)).arg(xlsReader->saveFilePath));
-}
-
-void momRobot::on_textButton_clicked()
-{
-    textFilePath = QFileDialog::getOpenFileName(this,"Open File", "","文本文件 (*)");
-    ui->textFilePath->setText(textFilePath);
-}
-
-void momRobot::on_excelButton_clicked()
-{
-    excelFilePath = QFileDialog::getOpenFileName(this,"Open File", "","Excel文件 (*.xlsx *.xls)");
-    ui->excelFilePath->setText(excelFilePath);
-}
-
-void momRobot::on_startButton_clicked()
-{
-    QFuture<void> future = QtConcurrent::run(this, &momRobot::processData);
 }
 
 momRobot::~momRobot()
