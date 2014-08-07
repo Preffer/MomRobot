@@ -30,6 +30,7 @@ void momRobot::updateConfig()
 
 void momRobot::processData()
 {
+    //this is the core function to process the data
     QTime start =  QTime::currentTime ();
     try{
         txtReader = (QSharedPointer<textReader>) new textReader(textFilePath);
@@ -68,6 +69,8 @@ void momRobot::on_excelButton_clicked()
 void momRobot::on_startButton_clicked()
 {
     QtConcurrent::run(this, &momRobot::processData);
+    ui->startButton->setEnabled(false);
+    ui->startButton->setText("处理中...");
 }
 
 void momRobot::receiveException(QString exception)
@@ -78,6 +81,8 @@ void momRobot::receiveException(QString exception)
 void momRobot::showComplete(int ms)
 {
     QMessageBox::information(this, "操作完成", QString("操作完成!  用时 %1 ms \n已保存到 %2").arg(ms).arg(xlsReader->saveFilePath));
+    ui->startButton->setEnabled(true);
+    ui->startButton->setText("开始！");
 }
 
 momRobot::~momRobot()
