@@ -76,6 +76,8 @@ void momRobot::on_startButton_clicked()
 void momRobot::receiveException(QString exception)
 {
     QMessageBox::critical(this, "出现错误", exception);
+    ui->startButton->setEnabled(true);
+    ui->startButton->setText("开始！");
 }
 
 void momRobot::showComplete(int ms)
