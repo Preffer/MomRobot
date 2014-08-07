@@ -97,7 +97,7 @@ void excelReader::checkNewMonth()
     for (int i = dataEnd; i >= dataStart; i--) {
         //remember in excel, Cells(Int, Int) in the format (row, col)
         cell = (QSharedPointer<QAxObject>) worksheet->querySubObject("Cells(Int, Int)", i, dateIndex);
-        day = cell->property("Value").toString().right(2).toInt();
+        day = cell->property("Value").toString().split("T")[0].right(2).toInt();
         if(day < newMonthBound) {
             dataEnd = i;
             return;
@@ -114,23 +114,25 @@ void excelReader::getValue()
      * It take quit a lot of time, so need a progress bar
      */
     valueList = (QSharedPointer<QStringList>) new QStringList();
-    int count = keyList->count();
-    emit progressBarInit(0, count);
+    int initCount = keyList->count();
+    emit progressBarInit(0, initCount);
     QString value;
     QSharedPointer<QAxObject> row;
-    for(int i = 0; i < count; i++) {
+    for(int i = 0; i < keyList->count(); i++) {
         value = keyValueMap->value(keyList->at(i));
         if(value.isEmpty()) {
             emit progressBarUpdate(i);
             row = (QSharedPointer<QAxObject>) worksheet->querySubObject("Rows(Int)", i + dataStart);
             row->dynamicCall("Delete()");
+            keyList->removeAt(i);
             dataEnd--;
+            i--;
         } else{
             valueList->append(value);
         }
     }
     //make the progressBar full
-    emit progressBarUpdate(count);
+    emit progressBarUpdate(initCount);
 }
 
 void excelReader::pushValue()
